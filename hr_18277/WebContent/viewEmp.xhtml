@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<h:outputStylesheet library="css" name="bootstrap.min.css" />
+	<h:outputStylesheet library="css" name="bootstrap-theme.css" />
+</h:head>
+<h:body>
+	<div class="container" style="margin-top: 10px">
+
+		<div class="jumbotron" style="background-color: #3790fc;" />
+		<p:dataTable value="#{newEmployee.emplist}" var="emplist">
+			<f:facet name="header">
+				<p:commandLink value="New employee" />
+			</f:facet>
+			<p:column headerText="Employee names">
+				<p:outputLabel value="#{emplist.firstName} #{emplist.lastName}" />
+			</p:column>
+			<p:column headerText="National ID">
+				<p:outputLabel value="#{emplist.nationalId}" />
+			</p:column>
+			<p:column headerText="Manager">
+				<p:outputLabel
+					value="#{emplist.manager.firstName} #{emplist.manager.lastName}" />
+			</p:column>
+			<p:column headerText="Gender">
+				<p:outputLabel value="#{emplist.gender}" />
+			</p:column>
+			<p:column headerText="Gross Salary">
+				<p:outputLabel value="#{emplist.grossSalary}" />
+			</p:column>
+
+			<p:column headerText="Bonus">
+				<p:outputLabel value="#{emplist.bonus}" />
+			</p:column>
+
+			<p:column headerText="Net Salary">
+				<p:outputLabel value="#{newEmployee.calcNetsalary(emplist)}" />
+			</p:column>
+		</p:dataTable>
+
+	</div>
+</h:body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<h:outputStylesheet library="css" name="bootstrap.min.css" />
+	<h:outputStylesheet library="css" name="bootstrap-theme.css" />
+</h:head>
+<h:body>
+	<div class="container" style="margin-top: 10px">
+
+		<div class="jumbotron" style="background-color: #3790fc;" />
+
+		<div class="row">
+			<div class="col-xs-6">
+				<p:panel header="Create New Employee">
+					<h:form id="myForm">
+
+						<p:selectOneMenu value="#{newEmployee.empType}"
+							style="margin-top:20px;">
+							<f:selectItem itemLabel="Select Employee Type" itemValue="" />
+							<f:selectItem itemLabel="Manager" itemValue="1" />
+							<f:selectItem itemLabel="Officer" itemValue="2" />
+							<p:ajax listener="#{newEmployee.activateManager()}" update="myForm" />
+						</p:selectOneMenu>
+
+						<p:separator />
+						<p:selectOneMenu value="#{newEmployee.managerId}"
+							disabled="#{newEmployee.diable}" style="margin-top:7px;">
+							<f:selectItem itemLabel="Select Manager" itemValue="" />
+							<f:selectItems value="#{newEmployee.managers}" var="eList" itemLabel="#{eList.firstName} #{eList.lastName}" itemValue="#{eList.nationalId}"/>
+						</p:selectOneMenu>
+					</h:form>
+				</p:panel>
+			</div>
+		</div>
+	</div>
+</h:body>
+</html>
