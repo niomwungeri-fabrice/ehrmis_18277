@@ -28,6 +28,9 @@
 				<p:outputLabel
 					value="#{emplist.manager.firstName} #{emplist.manager.lastName}" />
 			</p:column>
+			<p:column headerText="Age" style="width:40px;">
+				<p:outputLabel value="#{newEmployee.calculateAge(emplist)}" />
+			</p:column>
 			<p:column headerText="Gender">
 				<p:outputLabel value="#{emplist.gender}" />
 			</p:column>

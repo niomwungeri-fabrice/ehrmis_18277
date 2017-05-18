@@ -4,9 +4,13 @@
 package rw.itcg.usecase;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,8 +31,34 @@ public class NewEmployee {
 	private String empType;
 	private Gender gender;
 	private String managerId;
+	private Employee employee = new Employee();
+	private String selectedSex;
 	@Autowired
 	private EmployeeService empServ;
+
+	public void createEmployee() {
+		try {
+			if (empType.equals("1")) {
+				double bonus = employee.getGrossSalary() * 0.3;
+				employee.setBonus(bonus);
+				employee.setGender(Gender.valueOf(selectedSex));
+				empServ.saveEmployee(employee);
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_INFO, "Manager Created Successfully", null));
+
+			} else {
+				employee.setBonus(0);
+				employee.setGender(Gender.valueOf(selectedSex));
+				empServ.saveEmployee(employee);
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_INFO, "Officer Created Successfully", null));
+			}
+		} catch (Exception e) {
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:" + e.getMessage(), null));
+		}
+
+	}
 
 	public void activateManager() {
 		if (empType.equals("1")) {
@@ -38,6 +68,24 @@ public class NewEmployee {
 		} else {
 			diable = false;
 		}
+	}
+
+	public int calculateAge(Employee emp) {
+
+		Calendar currentDate = Calendar.getInstance();
+		currentDate.setTime(new Date());
+		int currentYear = currentDate.get(Calendar.YEAR);
+
+		Calendar bDate = Calendar.getInstance();
+		bDate.setTime(emp.getDateOfBirth());
+		int bYear = currentDate.get(Calendar.YEAR);
+
+		return (currentYear - bYear);
+
+	}
+
+	public Gender[] getSex() {
+		return Gender.values();
 	}
 
 	public List<Employee> getManagers() {
@@ -71,7 +119,9 @@ public class NewEmployee {
 	}
 
 	public double calcNetsalary(Employee emp) {
-		return 0.0;
+		double totalEarnings = (emp.getGrossSalary() + emp.getBonus());
+		double taxes = totalEarnings * 0.2;
+		return (totalEarnings - taxes);
 	}
 
 	public Gender getGender() {
@@ -106,4 +156,23 @@ public class NewEmployee {
 		this.managerId = managerId;
 	}
 
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+
+	public String getSelectedSex() {
+		return selectedSex;
+	}
+
+	public void setSelectedSex(String selectedSex) {
+		this.selectedSex = selectedSex;
+	}
+
+	public void testGender() {
+		System.out.println(selectedSex);
+	}
 }
