@@ -39,30 +39,44 @@
 						</p:selectOneMenu>
 						<br />
 						<p:watermark value="Nationa Id" for="nid" />
-						<p:inputMask mask="9 9999 9 9999999 9 99" style="margin-top:7px;"
+						<p:inputMask mask="9 9999 9 9999999 9 99" style="margin-top:7px; "
+							required="true" label="National Id"
+							requiredMessage="Verify your ID and try again"
 							value="#{newEmployee.employee.nationalId}" id="nid" />
 						<br />
 						<p:watermark value="First name" for="fName" />
 						<p:inputText value="#{newEmployee.employee.firstName}" id="fName"
-							style="margin-top:7px;" />
+							required="true" label="First Name" style="margin-top:7px;">
+							<f:validateLength minimum="3" />
+						</p:inputText>
 						<br />
 						<p:watermark value="Last name" for="lName" />
-						<p:inputText value="#{newEmployee.employee.lastName}" id="lName" style="margin-top:7px;" />
+						<p:inputText value="#{newEmployee.employee.lastName}" id="lName"
+							required="true" label="Last name" style="margin-top:7px;">
+							<f:validateLength minimum="3" />
+						</p:inputText>
 						<br />
 						<br />
-						<p:selectOneRadio value="#{newEmployee.selectedSex}">
+						<p:selectOneMenu value="#{newEmployee.selectedSex}"
+							required="true" label="Gender">
+							<f:selectItem itemLabel="Select Gender" itemValue="" />
 							<f:selectItems value="#{newEmployee.sex}" var="se"
 								itemLabel="#{se}" itemValue="#{se.toString()}" />
-						</p:selectOneRadio>
+						</p:selectOneMenu>
 						<br />
-						<p:watermark value="Date of birth" for="dob" />
-						<p:calendar id="dob" value="#{newEmployee.employee.dateOfBirth}" />
+						<br />
+						<p:watermark value="Date of birth" for="dob" required="true"
+							label="Date of birth" />
+						<p:calendar navigator="true" id="dob" pattern="dd/MM/yyyy"
+							yearRange="c-100:c+10" value="#{newEmployee.employee.dateOfBirth}" />
 
 						<br />
 						<p:watermark value="Gross Salary" for="gSalary" />
 						<p:inputText value="#{newEmployee.employee.grossSalary}"
-							style="margin-top:7px;margin-bottom:7px;" id="gSalary" />
-
+							required="true" label="Gross Salary"
+							style="margin-top:7px;margin-bottom:7px;" id="gSalary">
+							<f:validateDoubleRange minimum="50000" maximum="2000000" />
+						</p:inputText>
 						<br />
 						<p:commandButton value="Create Employee" style="height:40px;"
 							action="#{newEmployee.createEmployee()}" update=":myForm:growl" />

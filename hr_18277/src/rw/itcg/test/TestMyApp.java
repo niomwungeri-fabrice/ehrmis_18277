@@ -3,6 +3,7 @@
  */
 package rw.itcg.test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.context.ApplicationContext;
@@ -16,21 +17,24 @@ import rw.itcg.service.EmployeeService;
  * @Date May 17, 2017
  */
 public class TestMyApp {
+
 	public static void main(String args[]) {
 		try {
 			@SuppressWarnings("resource")
 			ApplicationContext ct = new ClassPathXmlApplicationContext("classpath:rw/itcg/config/app-context.xml");
 			EmployeeService empService = ct.getBean(EmployeeService.class);
-			List<Employee> em = empService.findAll();
-
-			for (Employee e : em) {
-				if (e.getManager().getNationalId().equals(null)) {
-					System.out.println(e.getManager().getFirstName());
+			List<Employee> l = new ArrayList<Employee>();
+			for (Employee emp : empService.findAll()) {
+				if (emp.getManager() == null) {
+					l.add(emp);
 				}
-
+			}
+			for (Employee e : l) {
+				String f = e.getFirstName();
+				String ln = e.getLastName();
+				System.out.println(f + " " + ln);
 			}
 
-			System.out.println("success");
 		} catch (Exception e) {
 
 		}

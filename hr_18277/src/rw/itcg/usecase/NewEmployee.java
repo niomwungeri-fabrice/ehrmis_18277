@@ -36,27 +36,48 @@ public class NewEmployee {
 	@Autowired
 	private EmployeeService empServ;
 
-	public void createEmployee() {
-		try {
-			if (empType.equals("1")) {
-				double bonus = employee.getGrossSalary() * 0.3;
-				employee.setBonus(bonus);
-				employee.setGender(Gender.valueOf(selectedSex));
-				empServ.saveEmployee(employee);
-				FacesContext.getCurrentInstance().addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_INFO, "Manager Created Successfully", null));
+	public String gotoIndex() {
+		return "index";
+	}
 
+	public String createEmployee() {
+		try {
+			NewEmployee ne = new NewEmployee();
+			int age = ne.calculateAge(employee);
+			if (age >= 18) {
+				if (empType.equals("1")) {
+					double bonus = employee.getGrossSalary() * 0.3;
+					employee.setBonus(bonus);
+					employee.setManager(null);
+					employee.setGender(Gender.valueOf(selectedSex));
+					empServ.saveEmployee(employee);
+					FacesContext.getCurrentInstance().addMessage(null,
+							new FacesMessage(FacesMessage.SEVERITY_INFO, "Manager Created Successfully", null));
+
+					return "viewEmp";
+				} else {
+					Employee officer = empServ.findByNid(managerId);
+					if (officer != null) {
+						employee.setManager(officer);
+						employee.setBonus(0);
+						employee.setGender(Gender.valueOf(selectedSex));
+						empServ.saveEmployee(employee);
+						FacesContext.getCurrentInstance().addMessage(null,
+								new FacesMessage(FacesMessage.SEVERITY_INFO, "Officer Created Successfully", null));
+						return "viewEmp";
+					}
+
+				}
 			} else {
-				employee.setBonus(0);
-				employee.setGender(Gender.valueOf(selectedSex));
-				empServ.saveEmployee(employee);
 				FacesContext.getCurrentInstance().addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_INFO, "Officer Created Successfully", null));
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "Age must be greater than 18", null));
+				return "index";
 			}
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error:" + e.getMessage(), null));
 		}
+		return "index";
 
 	}
 
@@ -78,7 +99,7 @@ public class NewEmployee {
 
 		Calendar bDate = Calendar.getInstance();
 		bDate.setTime(emp.getDateOfBirth());
-		int bYear = currentDate.get(Calendar.YEAR);
+		int bYear = bDate.get(Calendar.YEAR);
 
 		return (currentYear - bYear);
 
@@ -90,13 +111,13 @@ public class NewEmployee {
 
 	public List<Employee> getManagers() {
 		try {
-			List<Employee> emp = new ArrayList<Employee>();
-			for (Employee e : empServ.findAll()) {
-				if (e.getManager().getNationalId().equals(null)) {
-					emp.add(e);
+			List<Employee> l = new ArrayList<Employee>();
+			for (Employee emp : empServ.findAll()) {
+				if (emp.getManager() == null) {
+					l.add(emp);
 				}
 			}
-			return emp;
+			return l;
 		} catch (Exception e) {
 			return null;
 		}

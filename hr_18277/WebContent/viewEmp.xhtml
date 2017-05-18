@@ -14,38 +14,42 @@
 	<div class="container" style="margin-top: 10px">
 
 		<div class="jumbotron" style="background-color: #3790fc;" />
-		<p:dataTable value="#{newEmployee.emplist}" var="emplist">
-			<f:facet name="header">
-				<p:commandLink value="New employee" />
-			</f:facet>
-			<p:column headerText="Employee names">
-				<p:outputLabel value="#{emplist.firstName} #{emplist.lastName}" />
-			</p:column>
-			<p:column headerText="National ID">
-				<p:outputLabel value="#{emplist.nationalId}" />
-			</p:column>
-			<p:column headerText="Manager">
-				<p:outputLabel
-					value="#{emplist.manager.firstName} #{emplist.manager.lastName}" />
-			</p:column>
-			<p:column headerText="Age" style="width:40px;">
-				<p:outputLabel value="#{newEmployee.calculateAge(emplist)}" />
-			</p:column>
-			<p:column headerText="Gender">
-				<p:outputLabel value="#{emplist.gender}" />
-			</p:column>
-			<p:column headerText="Gross Salary">
-				<p:outputLabel value="#{emplist.grossSalary}" />
-			</p:column>
+		<h:form id="viewForm">
+			<p:messages closable="true"  />
+			<p:dataTable value="#{newEmployee.emplist}" var="emplist">
+				<f:facet name="header">
+					<p:commandLink actionListener="#{newEmployee.gotoIndex()}"
+						value="New Employee" />
+				</f:facet>
+				<p:column headerText="Employee names">
+					<p:outputLabel value="#{emplist.firstName} #{emplist.lastName}" />
+				</p:column>
+				<p:column headerText="National ID">
+					<p:outputLabel value="#{emplist.nationalId}" />
+				</p:column>
+				<p:column headerText="Manager">
+					<p:outputLabel
+						value="#{emplist.manager.firstName} #{emplist.manager.lastName}" />
+				</p:column>
+				<p:column headerText="Age" style="width:40px;">
+					<p:outputLabel value="#{newEmployee.calculateAge(emplist)}" />
+				</p:column>
+				<p:column headerText="Gender">
+					<p:outputLabel value="#{emplist.gender}" />
+				</p:column>
+				<p:column headerText="Gross Salary">
+					<p:outputLabel value="#{emplist.grossSalary}" />
+				</p:column>
 
-			<p:column headerText="Bonus">
-				<p:outputLabel value="#{emplist.bonus}" />
-			</p:column>
+				<p:column headerText="Bonus">
+					<p:outputLabel value="#{emplist.bonus}" />
+				</p:column>
 
-			<p:column headerText="Net Salary">
-				<p:outputLabel value="#{newEmployee.calcNetsalary(emplist)}" />
-			</p:column>
-		</p:dataTable>
+				<p:column headerText="Net Salary">
+					<p:outputLabel value="#{newEmployee.calcNetsalary(emplist)}" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
 
 	</div>
 </h:body>
